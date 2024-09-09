@@ -27,12 +27,12 @@ MAX_HEIGHT = 1024  # Set to 0 or less to ignore
 REPETITION_PENALTY = 1.3  # Penalty for repeating phrases, float ~1.5
 TEMPERATURE = 0.7  # Sampling temperature to control randomness
 TOP_K = 50  # Top-k sampling to limit number of potential next tokens
-BATCH_SIZE = 7  # How many images to process at one time
+BATCH_SIZE = 7  # How many images to process at one time. Batch 1 = 6gb VRAM. Batch 7 = 24gb VRAM.
 
 # Default values for input folder, output folder, and prompt
 DEFAULT_INPUT_FOLDER = Path(__file__).parent / "input"  # Folder containing input images
 DEFAULT_OUTPUT_FOLDER = DEFAULT_INPUT_FOLDER  # Folder for saving captions
-DEFAULT_PROMPT = "<RANDOM>"  # Default prompt for generating captions
+DEFAULT_PROMPT = "<MIXED_CAPTION>"  # Default prompt for generating captions
 # <GENERATE_TAGS> Generate prompt as danbooru style tags
 # <CAPTION> A one line caption for the image
 # <DETAILED_CAPTION> A structured caption format which detects the position of the subjects in the image
