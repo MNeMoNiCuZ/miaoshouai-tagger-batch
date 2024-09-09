@@ -27,12 +27,12 @@ MAX_HEIGHT = 1024  # Set to 0 or less to ignore
 REPETITION_PENALTY = 1.3  # Penalty for repeating phrases, float ~1.5
 TEMPERATURE = 0.7  # Sampling temperature to control randomness
 TOP_K = 50  # Top-k sampling to limit number of potential next tokens
-BATCH_SIZE = 7  # How many images to process at one time. Batch 1 = 6gb VRAM. Batch 7 = 24gb VRAM.
+BATCH_SIZE = 7  # How many images to process at one time
 
 # Default values for input folder, output folder, and prompt
 DEFAULT_INPUT_FOLDER = Path(__file__).parent / "input"  # Folder containing input images
 DEFAULT_OUTPUT_FOLDER = DEFAULT_INPUT_FOLDER  # Folder for saving captions
-DEFAULT_PROMPT = "<MIXED_CAPTION>"  # Default prompt for generating captions
+DEFAULT_PROMPT = "<RANDOM>"  # Default prompt for generating captions
 # <GENERATE_TAGS> Generate prompt as danbooru style tags
 # <CAPTION> A one line caption for the image
 # <DETAILED_CAPTION> A structured caption format which detects the position of the subjects in the image
@@ -125,7 +125,7 @@ def process_images_in_folder(images_to_caption, model, processor, prompt, save_f
     # Handle the <RANDOM> option with balanced rotation starting from a random index
     if prompt == "<RANDOM>":
         start_index = random.randint(0, len(random_prompts_list) - 1)
-        print(f"Starting balanced rotation at index: {start_index}")
+        print(f"Using random captioning method of the following types: {random_prompts_list}")
     else:
         print(f"Using prompt: {prompt}")
 
@@ -137,8 +137,8 @@ def process_images_in_folder(images_to_caption, model, processor, prompt, save_f
             images_to_resize += 1
 
     if images_to_resize > 0:
-        print(f"{images_to_resize} images will be resized to the maximum sizes ({max_width}x{max_height}).")
-        print("This resizing will not save over the images; it is only applied during inference.")
+        print(f"\n{images_to_resize} images will be resized to not exceed either maximum size: Width:{max_width}, or Height:{max_height}.")
+        print("This resizing will not save over the images; it is only applied during inference.\n")
 
     # Process images in batches
     for i in tqdm(range(num_batches), desc="Processing batches"):
@@ -150,8 +150,6 @@ def process_images_in_folder(images_to_caption, model, processor, prompt, save_f
                 current_prompt = random_prompts_list[(start_index + i * batch_size + j) % len(random_prompts_list)]
             else:
                 current_prompt = prompt
-
-            print(f"Using prompt: {current_prompt} for image {os.path.basename(image_path)}")
 
             if current_prompt == "<EMPTY>":
                 # Save empty text files for <EMPTY> prompt
